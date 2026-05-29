@@ -2,24 +2,47 @@
 #![no_std]
 
 use rmk::macros::rmk_central;
+use rmk::controller::PollingController as _;
 
 const NUM_LEDS: usize = 23;
+
+/// Simple HSV to RGB conversion (h: 0-255, s: 0-255, v: 0-255)
+fn hsv_to_rgb(h: u8, s: u8, v: u8) -> smart_leds::RGB8 {
+    use smart_leds::RGB8;
+    if s == 0 {
+        return RGB8::new(v, v, v);
+    }
+    let region = h / 43;
+    let remainder = (h as u16 - region as u16 * 43) * 6;
+    let p = ((v as u16 * (255 - s as u16)) >> 8) as u8;
+    let q = ((v as u16 * (255 - ((s as u16 * remainder) >> 8))) >> 8) as u8;
+    let t = ((v as u16 * (255 - ((s as u16 * (255 - remainder)) >> 8))) >> 8) as u8;
+    match region {
+        0 => RGB8::new(v, t, p),
+        1 => RGB8::new(q, v, p),
+        2 => RGB8::new(p, v, t),
+        3 => RGB8::new(p, q, v),
+        4 => RGB8::new(t, p, v),
+        _ => RGB8::new(v, p, q),
+    }
+}
 
 fn layer_color(layer: u8) -> smart_leds::RGB8 {
     use smart_leds::RGB8;
     match layer {
-        0 => RGB8::new(0, 0, 0),   // BASE: off
         1 => RGB8::new(0, 0, 40),  // NUM: blue
         2 => RGB8::new(40, 0, 40), // SYM: purple
         3 => RGB8::new(0, 40, 0),  // EXT: green
         4 => RGB8::new(40, 0, 0),  // FUNC: red
-        _ => RGB8::new(0, 0, 0),
+        _ => RGB8::new(0, 0, 0),   // unused fallback
     }
 }
 
 pub struct LayerRgbController<'d> {
     ws: embassy_rp::pio_programs::ws2812::PioWs2812<'d, embassy_rp::peripherals::PIO1, 0, { NUM_LEDS }>,
     sub: rmk::channel::ControllerSub,
+    current_layer: u8,
+    hue_offset: u8,
 }
 
 impl<'d> rmk::controller::Controller for LayerRgbController<'d> {
@@ -27,9 +50,13 @@ impl<'d> rmk::controller::Controller for LayerRgbController<'d> {
 
     async fn process_event(&mut self, event: Self::Event) {
         if let rmk::event::ControllerEvent::Layer(layer) = event {
-            let color = layer_color(layer);
-            let colors = [color; NUM_LEDS];
-            self.ws.write(&colors).await;
+            self.current_layer = layer;
+            // For non-BASE layers, immediately show static color
+            if layer > 0 {
+                let color = layer_color(layer);
+                let colors = [color; NUM_LEDS];
+                self.ws.write(&colors).await;
+            }
         }
     }
 
@@ -38,9 +65,26 @@ impl<'d> rmk::controller::Controller for LayerRgbController<'d> {
     }
 }
 
+impl<'d> rmk::controller::PollingController for LayerRgbController<'d> {
+    const INTERVAL: embassy_time::Duration = embassy_time::Duration::from_millis(33); // ~30fps
+
+    async fn update(&mut self) {
+        if self.current_layer == 0 {
+            // Rainbow animation: each LED offset by hue
+            let mut colors = [smart_leds::RGB8::new(0, 0, 0); NUM_LEDS];
+            for i in 0..NUM_LEDS {
+                let hue = self.hue_offset.wrapping_add((i as u16 * 255 / NUM_LEDS as u16) as u8);
+                colors[i] = hsv_to_rgb(hue, 255, 32); // full saturation, low brightness
+            }
+            self.ws.write(&colors).await;
+            self.hue_offset = self.hue_offset.wrapping_add(2);
+        }
+    }
+}
+
 #[rmk_central]
 mod keyboard_central {
-    #[controller(event)]
+    #[controller(poll)]
     fn layer_rgb() -> LayerRgbController<'static> {
         use embassy_rp::pio::Pio;
         use embassy_rp::pio_programs::ws2812::{PioWs2812, PioWs2812Program};
@@ -59,6 +103,8 @@ mod keyboard_central {
         LayerRgbController {
             ws,
             sub: defmt::unwrap!(rmk::channel::CONTROLLER_CHANNEL.subscriber()),
+            current_layer: 0,
+            hue_offset: 0,
         }
     }
 }

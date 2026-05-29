@@ -36,10 +36,10 @@ keymap = [
         ["No",    "A",     "S",     "D",     "F",     "G",     "No"    ],
         ["No",    "Z",     "X",     "C",     "V",     "B",     "No"    ],
         ["No",    "No",    "No",    "MO(3)", "OSM(LShift)", "Space", "No"],
-        ["No",    "Y",     "U",     "I",     "O",     "P",     "No"    ],
-        ["No",    "H",     "J",     "K",     "L",     "Quote", "No"    ],
-        ["No",    "N",     "M",     "Comma", "Dot",   "Slash", "No"    ],
-        ["No",    "No",    "No",    "Enter", "MO(2)", "Backspace", "No"],
+        ["No", "P", "O", "I", "U", "Y", "No"],
+        ["No", "Quote", "L", "K", "J", "H", "No"],
+        ["No", "Slash", "Dot", "Comma", "M", "N", "No"],
+        ["No", "No", "No", "Backspace", "MO(2)", "Enter", "No"],
     ],
     # NUM
     [
@@ -47,10 +47,10 @@ keymap = [
         ["No",    "WM(Q, RAlt)","WM(W, RAlt)","WM(P, RAlt)","No","No","No"],
         ["No",    "No",    "No",    "No",    "Escape","Tab",   "No"    ],
         ["No",    "No",    "No",    "Delete","Tab",   "Space", "No"    ],
-        ["No",    "Kc6",   "Kc7",   "Kc8",   "Kc9",   "Kc0",   "No"    ],
-        ["No",    "Left",  "Down",  "Up",    "Right", "No",    "No"    ],
-        ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
-        ["No",    "No",    "No",    "Enter", "Backspace","Backspace","No"],
+        ["No", "Kc0", "Kc9", "Kc8", "Kc7", "Kc6", "No"],
+        ["No", "No", "Right", "Up", "Down", "Left", "No"],
+        ["No", "No", "No", "No", "No", "No", "No"],
+        ["No", "No", "No", "Backspace", "Backspace", "Enter", "No"],
     ],
     # SYM
     [
@@ -58,10 +58,10 @@ keymap = [
         ["No",    "Grave", "WM(LeftBracket, LShift)","WM(RightBracket, LShift)","WM(Kc9, LShift)","WM(Kc0, LShift)","No"],
         ["No",    "WM(Backslash, LShift)","WM(Comma, LShift)","WM(Dot, LShift)","LeftBracket","RightBracket","No"],
         ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
-        ["No",    "WM(Kc6, LShift)","WM(Kc7, LShift)","WM(Kc8, LShift)","Equal","WM(Grave, LShift)","No"],
-        ["No",    "WM(Semicolon, LShift)","OSM(LCtrl)","OSM(LShift)","OSM(LAlt)","OSM(LGui)","No"],
-        ["No",    "Semicolon","Minus","WM(Minus, LShift)","WM(Equal, LShift)","Backslash","No"],
-        ["No",    "No",    "No",    "Enter", "_",     "_",     "No"    ],
+        ["No", "WM(Grave, LShift)", "Equal", "WM(Kc8, LShift)", "WM(Kc7, LShift)", "WM(Kc6, LShift)", "No"],
+        ["No", "OSM(LGui)", "OSM(LAlt)", "OSM(LShift)", "OSM(LCtrl)", "WM(Semicolon, LShift)", "No"],
+        ["No", "Backslash", "WM(Equal, LShift)", "WM(Minus, LShift)", "Minus", "Semicolon", "No"],
+        ["No", "No", "No", "_", "_", "Enter", "No"],
     ],
     # EXT
     [
@@ -69,10 +69,10 @@ keymap = [
         ["No",    "OSM(LGui)","OSM(LAlt)","OSM(LShift)","OSM(LCtrl)","No","No"],
         ["No",    "No",    "Escape","No",    "Escape","Tab",   "No"    ],
         ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
-        ["No",    "Insert","PageDown","PageUp","No",  "No",    "No"    ],
-        ["No",    "Left",  "Down",  "Up",    "Right", "Delete","No"    ],
-        ["No",    "No",    "Backspace","Home","End",  "PrintScreen","No"],
-        ["No",    "No",    "No",    "Enter", "_",     "_",     "No"    ],
+        ["No", "No", "No", "PageUp", "PageDown", "Insert", "No"],
+        ["No", "Delete", "Right", "Up", "Down", "Left", "No"],
+        ["No", "PrintScreen", "End", "Home", "Backspace", "No", "No"],
+        ["No", "No", "No", "_", "_", "Enter", "No"],
     ],
     # FUNC
     [
@@ -80,10 +80,10 @@ keymap = [
         ["No",    "OSM(LGui)","OSM(LAlt)","OSM(LShift)","OSM(LCtrl)","No","No"],
         ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
         ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
-        ["No",    "No",    "F7",    "F8",    "F9",    "F10",   "No"    ],
-        ["No",    "BrightnessUp","F4","F5",  "F6",    "F11",   "No"    ],
-        ["No",    "BrightnessDown","F1","F2","F3",    "F12",   "No"    ],
-        ["No",    "No",    "No",    "Enter", "_",     "_",     "No"    ],
+        ["No", "F10", "F9", "F8", "F7", "No", "No"],
+        ["No", "F11", "F6", "F5", "F4", "BrightnessUp", "No"],
+        ["No", "F12", "F3", "F2", "F1", "BrightnessDown", "No"],
+        ["No", "No", "No", "_", "_", "Enter", "No"],
     ],
 ]
 
@@ -137,8 +137,8 @@ serial = [{ instance = "PIO0", tx_pin = "PIN_12", rx_pin = "PIN_12" }]
 [split.peripheral.matrix]
 matrix_type = "direct_pin"
 direct_pins = [
-    ["PIN_8",  "PIN_9",  "PIN_3",  "PIN_2",  "PIN_1",  "PIN_27", "PIN_25"],
-    ["PIN_11", "PIN_14", "PIN_4",  "PIN_0",  "PIN_28", "PIN_26", "PIN_23"],
-    ["PIN_15", "PIN_18", "PIN_5",  "PIN_29", "PIN_20", "PIN_22", "_"     ],
-    ["_",      "_",      "_",      "PIN_16", "PIN_17", "PIN_19", "_"     ],
+    ["PIN_25", "PIN_27", "PIN_1", "PIN_2", "PIN_3", "PIN_9", "PIN_8"],
+    ["PIN_23", "PIN_26", "PIN_28", "PIN_0", "PIN_4", "PIN_14", "PIN_11"],
+    ["_", "PIN_22", "PIN_20", "PIN_29", "PIN_5", "PIN_18", "PIN_15"],
+    ["_", "_", "_", "PIN_19", "PIN_17", "PIN_16", "_"],
 ]
