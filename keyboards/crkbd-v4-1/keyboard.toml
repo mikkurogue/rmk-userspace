@@ -96,7 +96,7 @@ adjust = 4
 timeout = "1s"
 
 [behavior.combo]
-timeout = "150ms"
+timeout = "50ms"
 combos = [
   { actions = ["D", "F"], output = "MO(1)" },
   { actions = ["J", "K"], output = "MO(1)" },
