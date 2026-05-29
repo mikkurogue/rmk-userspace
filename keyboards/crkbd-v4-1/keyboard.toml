@@ -1,0 +1,109 @@
+# Corne v4.1 Standard — RMK Keyboard Configuration
+#
+# Pin mapping derived from QMK's crkbd/rev4_1 info.json.
+# This board uses a DIRECT PIN matrix (no row/col scanning diodes).
+# Split communication via UART serial on GP12.
+# WS2812 RGB LEDs on GP10, 23 LEDs per half (46 total).
+# Handedness detected via GP21.
+
+[keyboard]
+name = "Corne v4.1"
+product_name = "Corne v4.1 Standard"
+vendor_id = 0x4653
+product_id = 0x0004
+manufacturer = "foostan"
+chip = "rp2040"
+
+[layout]
+rows = 4
+cols = 7
+layers = 5
+
+# Layer 0: BASE (QWERTY)
+# Layer 1: NUM
+# Layer 2: SYM
+# Layer 3: EXT
+# Layer 4: FUNC
+#
+# Note: Callum oneshot mods (OS_SHFT, OS_CTRL, OS_ALT, OS_GUIC) and combos
+# will be handled in Rust code, not in TOML config.
+# Tri-layer (EXT+SYM=FUNC) also handled in Rust.
+#
+# The LAYOUT_split_3x6_3_ex2 has 7 cols per side:
+#   col0=outer, col1-5=main 3x6, col6=extra inner key
+#
+# Using "_" for transparent, "No" for no-op
+keymap = [
+    # BASE
+    [
+        ["No",    "Q",     "W",     "E",     "R",     "T",     "No"    ],
+        ["No",    "A",     "S",     "D",     "F",     "G",     "No"    ],
+        ["No",    "Z",     "X",     "C",     "V",     "B",     "No"    ],
+        ["No",    "No",    "No",    "MO(3)", "OSM(LShift)", "Space",  "No"    ],
+    ],
+    # NUM
+    [
+        ["No",    "Kc1",   "Kc2",   "Kc3",   "Kc4",   "Kc5",   "No"    ],
+        ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
+        ["No",    "No",    "No",    "No",    "Escape","Tab",   "No"    ],
+        ["No",    "No",    "No",    "Delete","Tab",   "Space", "No"    ],
+    ],
+    # SYM
+    [
+        ["No",    "Exclaim","At",   "Hash",  "Dollar","Percent","No"   ],
+        ["No",    "Grave", "LBrace","RBrace","LParen","RParen","No"    ],
+        ["No",    "Pipe",  "LAngle","RAngle","LBracket","RBracket","No"],
+        ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
+    ],
+    # EXT
+    [
+        ["No",    "Escape","No",    "No",    "No",    "Insert","No"    ],
+        ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
+        ["No",    "No",    "Escape","No",    "Escape","Tab",   "No"    ],
+        ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
+    ],
+    # FUNC
+    [
+        ["No",    "Stop",  "MediaPlayPause","VolDown","VolUp","Mute","No"],
+        ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
+        ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
+        ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
+    ],
+]
+
+[storage]
+
+[split]
+connection = "serial"
+
+[split.central]
+rows = 4
+cols = 7
+row_offset = 0
+col_offset = 0
+serial = [
+    { instance = "UART0", tx_pin = "PIN_12", rx_pin = "PIN_12" },
+]
+[split.central.matrix]
+matrix_type = "direct_pin"
+direct_pins = [
+    ["PIN_22", "PIN_20", "PIN_23", "PIN_26", "PIN_29", "PIN_0",  "PIN_4" ],
+    ["PIN_19", "PIN_18", "PIN_24", "PIN_27", "PIN_1",  "PIN_2",  "PIN_8" ],
+    ["PIN_17", "PIN_16", "PIN_25", "PIN_28", "PIN_3",  "PIN_9",  "_"     ],
+    ["_",      "_",      "_",      "PIN_14", "PIN_15", "PIN_11", "_"     ],
+]
+
+[[split.peripheral]]
+rows = 4
+cols = 7
+row_offset = 4
+col_offset = 0
+serial = [{ instance = "UART0", tx_pin = "PIN_12", rx_pin = "PIN_12" }]
+[split.peripheral.matrix]
+matrix_type = "direct_pin"
+direct_pins = [
+    ["PIN_8",  "PIN_9",  "PIN_3",  "PIN_2",  "PIN_1",  "PIN_27", "PIN_25"],
+    ["PIN_11", "PIN_14", "PIN_4",  "PIN_0",  "PIN_28", "PIN_26", "PIN_23"],
+    ["PIN_15", "PIN_18", "PIN_5",  "PIN_29", "PIN_20", "PIN_22", "_"     ],
+    ["_",      "_",      "_",      "PIN_16", "PIN_17", "PIN_19", "_"     ],
+]

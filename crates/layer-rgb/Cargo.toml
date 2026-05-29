@@ -1,0 +1,7 @@
+[package]
+name = "rmk-layer-rgb"
+version = "0.1.0"
+edition = "2021"
+description = "Per-layer RGB color definitions for RMK keyboards"
+
+[dependencies]

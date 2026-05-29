@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "crates/oneshot",
+    "crates/layer-rgb",
+    "keyboards/crkbd-v4-1",
+]
+resolver = "2"

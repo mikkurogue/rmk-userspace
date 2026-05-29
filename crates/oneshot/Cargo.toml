@@ -1,0 +1,7 @@
+[package]
+name = "rmk-oneshot"
+version = "0.1.0"
+edition = "2021"
+description = "Callum-style oneshot modifiers for RMK keyboards"
+
+[dependencies]
