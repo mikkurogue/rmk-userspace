@@ -1,13 +1,10 @@
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
-# Use elf2uf2-rs for UF2 flashing (no probe needed)
-runner = "elf2uf2-rs -d"
-
-# Use flip-link for stack overflow protection
-linker = "flip-link"
+# runner = "probe-rs run --chip RP2040"
+# runner = "elf2uf2-rs -d"
 
 [build]
-target = "thumbv6m-none-eabi"
+target = "thumbv6m-none-eabi" # Cortex-M0 and Cortex-M0+
 
 [env]
-DEFMT_LOG = "debug"
+DEFMT_LOG = "info"
 KEYBOARD_TOML_PATH = { value = "keyboard.toml", relative = true }

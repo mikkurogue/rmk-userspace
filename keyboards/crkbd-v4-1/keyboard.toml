@@ -2,9 +2,9 @@
 #
 # Pin mapping derived from QMK's crkbd/rev4_1 info.json.
 # This board uses a DIRECT PIN matrix (no row/col scanning diodes).
-# Split communication via UART serial on GP12.
+# Split communication via half-duplex PIO serial on GP12.
 # WS2812 RGB LEDs on GP10, 23 LEDs per half (46 total).
-# Handedness detected via GP21.
+# Handedness detected via GP21 in QMK; RMK uses separate binaries.
 
 [keyboard]
 name = "Corne v4.1"
@@ -15,7 +15,7 @@ manufacturer = "foostan"
 chip = "rp2040"
 
 [layout]
-rows = 4
+rows = 8
 cols = 7
 layers = 5
 
@@ -25,21 +25,21 @@ layers = 5
 # Layer 3: EXT
 # Layer 4: FUNC
 #
-# Note: Callum oneshot mods (OS_SHFT, OS_CTRL, OS_ALT, OS_GUIC) and combos
-# will be handled in Rust code, not in TOML config.
-# Tri-layer (EXT+SYM=FUNC) also handled in Rust.
+# 8 rows total: rows 0-3 = left (central), rows 4-7 = right (peripheral)
+# 7 cols: col0=outer, col1-5=main, col6=extra inner
 #
-# The LAYOUT_split_3x6_3_ex2 has 7 cols per side:
-#   col0=outer, col1-5=main 3x6, col6=extra inner key
-#
-# Using "_" for transparent, "No" for no-op
+# Callum oneshot mods, combos, tri-layer handled in Rust code.
 keymap = [
     # BASE
     [
         ["No",    "Q",     "W",     "E",     "R",     "T",     "No"    ],
         ["No",    "A",     "S",     "D",     "F",     "G",     "No"    ],
         ["No",    "Z",     "X",     "C",     "V",     "B",     "No"    ],
-        ["No",    "No",    "No",    "MO(3)", "OSM(LShift)", "Space",  "No"    ],
+        ["No",    "No",    "No",    "MO(3)", "OSM(LShift)", "Space", "No"],
+        ["No",    "Y",     "U",     "I",     "O",     "P",     "No"    ],
+        ["No",    "H",     "J",     "K",     "L",     "Quote", "No"    ],
+        ["No",    "N",     "M",     "Comma", "Dot",   "Slash", "No"    ],
+        ["No",    "No",    "No",    "Enter", "MO(2)", "Backspace", "No"],
     ],
     # NUM
     [
@@ -47,13 +47,21 @@ keymap = [
         ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
         ["No",    "No",    "No",    "No",    "Escape","Tab",   "No"    ],
         ["No",    "No",    "No",    "Delete","Tab",   "Space", "No"    ],
+        ["No",    "Kc6",   "Kc7",   "Kc8",   "Kc9",   "Kc0",   "No"    ],
+        ["No",    "Left",  "Down",  "Up",    "Right", "No",    "No"    ],
+        ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
+        ["No",    "No",    "No",    "Enter", "Backspace","Backspace","No"],
     ],
     # SYM
     [
-        ["No",    "Exclaim","At",   "Hash",  "Dollar","Percent","No"   ],
-        ["No",    "Grave", "LBrace","RBrace","LParen","RParen","No"    ],
-        ["No",    "Pipe",  "LAngle","RAngle","LBracket","RBracket","No"],
+        ["No",    "WM(Kc1, LShift)","WM(Kc2, LShift)","WM(Kc3, LShift)","WM(Kc4, LShift)","WM(Kc5, LShift)","No"],
+        ["No",    "Grave", "WM(LeftBracket, LShift)","WM(RightBracket, LShift)","WM(Kc9, LShift)","WM(Kc0, LShift)","No"],
+        ["No",    "WM(Backslash, LShift)","WM(Comma, LShift)","WM(Dot, LShift)","LeftBracket","RightBracket","No"],
         ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
+        ["No",    "WM(Kc6, LShift)","WM(Kc7, LShift)","WM(Kc8, LShift)","Equal","WM(Grave, LShift)","No"],
+        ["No",    "WM(Semicolon, LShift)","No","No", "No",    "No",    "No"    ],
+        ["No",    "Semicolon","Minus","WM(Minus, LShift)","WM(Equal, LShift)","Backslash","No"],
+        ["No",    "No",    "No",    "Enter", "_",     "_",     "No"    ],
     ],
     # EXT
     [
@@ -61,17 +69,27 @@ keymap = [
         ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
         ["No",    "No",    "Escape","No",    "Escape","Tab",   "No"    ],
         ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
+        ["No",    "Insert","PageDown","PageUp","No",  "No",    "No"    ],
+        ["No",    "Left",  "Down",  "Up",    "Right", "Delete","No"    ],
+        ["No",    "No",    "Backspace","Home","End",  "PrintScreen","No"],
+        ["No",    "No",    "No",    "Enter", "_",     "_",     "No"    ],
     ],
     # FUNC
     [
-        ["No",    "Stop",  "MediaPlayPause","VolDown","VolUp","Mute","No"],
+        ["No",    "MediaStop","MediaPlayPause","AudioVolDown","AudioVolUp","AudioMute","No"],
         ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
         ["No",    "No",    "No",    "No",    "No",    "No",    "No"    ],
         ["No",    "No",    "No",    "_",     "_",     "Space", "No"    ],
+        ["No",    "No",    "F7",    "F8",    "F9",    "F10",   "No"    ],
+        ["No",    "BrightnessUp","F4","F5",  "F6",    "F11",   "No"    ],
+        ["No",    "BrightnessDown","F1","F2","F3",    "F12",   "No"    ],
+        ["No",    "No",    "No",    "Enter", "_",     "_",     "No"    ],
     ],
 ]
 
 [storage]
+
+[host]
 
 [split]
 connection = "serial"
@@ -81,8 +99,9 @@ rows = 4
 cols = 7
 row_offset = 0
 col_offset = 0
+# Half-duplex PIO serial on GP12 (same pin for tx and rx)
 serial = [
-    { instance = "UART0", tx_pin = "PIN_12", rx_pin = "PIN_12" },
+    { instance = "PIO0", tx_pin = "PIN_12", rx_pin = "PIN_12" },
 ]
 [split.central.matrix]
 matrix_type = "direct_pin"
@@ -98,7 +117,7 @@ rows = 4
 cols = 7
 row_offset = 4
 col_offset = 0
-serial = [{ instance = "UART0", tx_pin = "PIN_12", rx_pin = "PIN_12" }]
+serial = [{ instance = "PIO0", tx_pin = "PIN_12", rx_pin = "PIN_12" }]
 [split.peripheral.matrix]
 matrix_type = "direct_pin"
 direct_pins = [

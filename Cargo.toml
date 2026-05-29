@@ -2,6 +2,14 @@
 members = [
     "crates/oneshot",
     "crates/layer-rgb",
+]
+exclude = [
     "keyboards/crkbd-v4-1",
 ]
 resolver = "2"
+
+# Note: keyboard crates are NOT part of the workspace.
+# RMK's proc macro reads ./Cargo.toml to detect features,
+# so each keyboard must be its own standalone crate.
+# Build keyboards from their own directories:
+#   cd keyboards/crkbd-v4-1 && cargo make uf2 --release

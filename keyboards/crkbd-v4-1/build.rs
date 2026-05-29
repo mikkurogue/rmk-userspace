@@ -1,18 +1,17 @@
 //! Build script for crkbd-v4-1
 //!
-//! Copies memory.x to the linker search path and generates VIAL config.
+//! Copies memory.x to linker search path and generates VIAL config.
 
+use const_gen::*;
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::{env, fs};
-
-use const_gen::*;
 use xz2::read::XzEncoder;
 
 fn main() {
-    println!("cargo:rerun-if-changed=keyboard.toml");
     println!("cargo:rerun-if-changed=vial.json");
+    println!("cargo:rerun-if-changed=keyboard.toml");
 
     generate_vial_config();
 
@@ -27,6 +26,7 @@ fn main() {
     println!("cargo:rustc-link-arg=--nmagic");
     println!("cargo:rustc-link-arg=-Tlink.x");
     println!("cargo:rustc-link-arg=-Tdefmt.x");
+    println!("cargo:rustc-linker=flip-link");
 }
 
 fn generate_vial_config() {
@@ -36,12 +36,10 @@ fn generate_vial_config() {
     let mut content = String::new();
     match File::open(p) {
         Ok(mut file) => {
-            file.read_to_string(&mut content).expect("Cannot read vial.json");
+            file.read_to_string(&mut content)
+                .expect("Cannot read vial.json");
         }
-        Err(e) => {
-            println!("cargo:warning=No vial.json found ({e}), using empty config");
-            content = "{}".to_string();
-        }
+        Err(e) => println!("Cannot find vial.json {:?}: {}", p, e),
     };
 
     let vial_cfg = json::stringify(json::parse(&content).unwrap());
