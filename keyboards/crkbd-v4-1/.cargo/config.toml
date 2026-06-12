@@ -9,4 +9,4 @@ target = "thumbv6m-none-eabi" # Cortex-M0 and Cortex-M0+
 DEFMT_LOG = "info"
 KEYBOARD_TOML_PATH = { value = "keyboard.toml", relative = true }
 # Prevent rustc stack overflow when compiling rmk-types proc macros (rust-lang/rust bug)
-RUST_MIN_STACK = "16777216"
+RUST_MIN_STACK = "16777220"
