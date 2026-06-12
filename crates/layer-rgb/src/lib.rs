@@ -75,3 +75,5 @@ pub fn scale_brightness(mut hsv: Hsv, brightness: u8) -> Hsv {
     hsv.v = ((hsv.v as u16 * brightness as u16) / 255) as u8;
     hsv
 }
+
+pub mod controller;
